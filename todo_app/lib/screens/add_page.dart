@@ -106,6 +106,8 @@ class _AddTodoPageState extends State<AddTodoPage> {
       );
 
       if (response.statusCode == 200) {
+        titleController.text = '';
+        descriptionController.text = '';
         print('Update Success');
         showSuccessMessage('Update Success!');
       } else {
