@@ -85,11 +85,18 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   Future<void> deleteById(String id) async {
-    final url = 'https://api.nstack.in/v1/todos/&id';
+    final url = 'https://api.nstack.in/v1/todos/$id';
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
-    if (response.statusCode == 2009) {
-    } else {}
+    if (response.statusCode == 200) {
+      final filtered = items.where((element) => element['_id'] != id).toList();
+      showSuccessMessage('Deletion Success');
+      setState(() {
+        items = filtered;
+      });
+    } else {
+      showErrorMessage('Deletion Failed');
+    }
   }
 
   Future<void> fetchTodo() async {
@@ -106,5 +113,17 @@ class _TodoListPageState extends State<TodoListPage> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  void showSuccessMessage(String message) {
+    final snackBar =
+        SnackBar(content: Text(message), backgroundColor: Colors.green);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void showErrorMessage(String message) {
+    final snackBar =
+        SnackBar(content: Text(message), backgroundColor: Colors.red);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
