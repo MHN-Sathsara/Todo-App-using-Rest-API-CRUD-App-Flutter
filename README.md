@@ -30,4 +30,4 @@ To get started with the Todo App project, ensure you have the following prerequi
 
 - Thanks to the Flutter and Dart teams for their excellent frameworks and documentation.
 - Inspired by various todo list applications and productivity tools.
-- This app was created by following the tutorial on [YouTube]([https://www.youtube.com/watch?v=example](https://www.youtube.com/watch?v=Wsor0fci3Ss)).
+- This app was created by following the tutorial on [YouTube][https://www.youtube.com/watch?v=example](https://www.youtube.com/watch?v=Wsor0fci3Ss).
