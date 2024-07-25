@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/screens/too_list.dart';
+import 'package:todo_app/screens/splashscreen.dart';
 
 void main() {
   runApp(const MyApp());
