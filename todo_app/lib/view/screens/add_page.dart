@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:todo_app/controllers/todo_controller.dart';
 
 class AddTodoPage extends StatefulWidget {
   final Map? todo;
@@ -37,6 +39,8 @@ class _AddTodoPageState extends State<AddTodoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final TodoController todoController = Get.find();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -54,9 +58,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
             controller: titleController,
             decoration: const InputDecoration(hintText: 'Title'),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           TextField(
             controller: descriptionController,
             decoration: const InputDecoration(hintText: 'Description'),
@@ -64,11 +66,11 @@ class _AddTodoPageState extends State<AddTodoPage> {
             minLines: 4,
             maxLines: 8,
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: isEdit ? updateData : submitData,
+            onPressed: isEdit
+                ? () => updateData(todoController)
+                : () => submitData(todoController),
             child: Padding(
               padding: const EdgeInsets.all(14.0),
               child: Text(isEdit ? 'Update' : 'Submit'),
@@ -79,12 +81,11 @@ class _AddTodoPageState extends State<AddTodoPage> {
     );
   }
 
-//data'PUT'
-  Future<void> updateData() async {
+  Future<void> updateData(TodoController todoController) async {
     final todo = widget.todo;
     if (todo == null) {
-      print('You cannot call update without todo data');
-      showErrorMessage('You cannot call update without todo data');
+      Get.snackbar('Error', 'You cannot call update without todo data',
+          backgroundColor: Colors.red);
       return;
     }
 
@@ -108,20 +109,19 @@ class _AddTodoPageState extends State<AddTodoPage> {
       if (response.statusCode == 200) {
         titleController.text = '';
         descriptionController.text = '';
-        print('Update Success');
-        showSuccessMessage('Update Success!');
+        Get.snackbar('Success', 'Update Success!',
+            backgroundColor: Colors.green);
+        todoController.fetchTodos();
       } else {
-        print('Update Failed with status code: ${response.statusCode}');
-        showErrorMessage('Update Failed');
+        Get.snackbar('Error', 'Update Failed', backgroundColor: Colors.red);
       }
     } catch (e) {
-      print('Failed to update data: $e');
-      showErrorMessage('Update Failed');
+      Get.snackbar('Error', 'Failed to update data',
+          backgroundColor: Colors.red);
     }
   }
 
-//POST
-  Future<void> submitData() async {
+  Future<void> submitData(TodoController todoController) async {
     final title = titleController.text;
     final description = descriptionController.text;
     final body = {
@@ -141,27 +141,15 @@ class _AddTodoPageState extends State<AddTodoPage> {
       if (response.statusCode == 201) {
         titleController.text = '';
         descriptionController.text = '';
-        print('Creation Success');
-        showSuccessMessage('Creation Success!');
+        Get.snackbar('Success', 'Creation Success!',
+            backgroundColor: Colors.green);
+        todoController.fetchTodos();
       } else {
-        print('Creation Failed with status code: ${response.statusCode}');
-        showErrorMessage('Creation Failed');
+        Get.snackbar('Error', 'Creation Failed', backgroundColor: Colors.red);
       }
     } catch (e) {
-      print('Failed to submit data: $e');
-      showErrorMessage('Creation Failed');
+      Get.snackbar('Error', 'Failed to submit data',
+          backgroundColor: Colors.red);
     }
-  }
-
-  void showSuccessMessage(String message) {
-    final snackBar =
-        SnackBar(content: Text(message), backgroundColor: Colors.green);
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void showErrorMessage(String message) {
-    final snackBar =
-        SnackBar(content: Text(message), backgroundColor: Colors.red);
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
