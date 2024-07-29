@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.2.3
 
   http: any
+  dio: ^5.5.0+1
 dev_dependencies:
   flutter_native_splash: ^2.0.1+1
   flutter_test:

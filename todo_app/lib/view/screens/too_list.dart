@@ -49,8 +49,7 @@ class TodoListPage extends StatelessWidget {
                       return [
                         const PopupMenuItem(value: 'edit', child: Text('Edit')),
                         const PopupMenuItem(
-                            value: 'delete',
-                            child: Text('Delete')),
+                            value: 'delete', child: Text('Delete')),
                       ];
                     },
                   ),
