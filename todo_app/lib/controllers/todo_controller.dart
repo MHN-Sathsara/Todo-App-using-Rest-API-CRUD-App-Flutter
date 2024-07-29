@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
-//import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class TodoController extends GetxController {
   var todos = [].obs;
@@ -19,9 +17,9 @@ class TodoController extends GetxController {
     isLoading(true);
     const url = 'https://api.nstack.in/v1/todos';
     try {
-      final Response = await dio.get(url);
-      if (Response.statusCode == 200) {
-        final json = Response.data as Map;
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        final json = response.data as Map;
         final result = json['items'] as List;
         todos.assignAll(result);
       }
