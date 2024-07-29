@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:todo_app/controllers/todo_controller.dart';
@@ -98,26 +99,29 @@ class _AddTodoPageState extends State<AddTodoPage> {
       "is_completed": false,
     };
     final url = 'https://api.nstack.in/v1/todos/$id';
-    final uri = Uri.parse(url);
+    final Dio dio = Dio();
+
     try {
-      final response = await http.put(
-        uri,
-        body: jsonEncode(body),
-        headers: {'Content-Type': 'application/json'},
+      final response = await dio.put(
+        url,
+        data: body,
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
       );
 
       if (response.statusCode == 200) {
         titleController.text = '';
         descriptionController.text = '';
         Get.snackbar('Success', 'Update Success!',
-            backgroundColor: Colors.green);
+            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
         todoController.fetchTodos();
       } else {
         Get.snackbar('Error', 'Update Failed', backgroundColor: Colors.red);
       }
     } catch (e) {
       Get.snackbar('Error', 'Failed to update data',
-          backgroundColor: Colors.red);
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
   }
 
@@ -130,12 +134,15 @@ class _AddTodoPageState extends State<AddTodoPage> {
       "is_completed": false,
     };
     const url = 'https://api.nstack.in/v1/todos';
-    final uri = Uri.parse(url);
+    final Dio dio = Dio();
+    //final uri = Uri.parse(url);
     try {
-      final response = await http.post(
-        uri,
-        body: jsonEncode(body),
-        headers: {'Content-Type': 'application/json'},
+      final response = await dio.post(
+        url,
+        data: body,
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
       );
 
       if (response.statusCode == 201) {

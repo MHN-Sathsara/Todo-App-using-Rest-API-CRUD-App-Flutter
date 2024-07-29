@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
+//import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class TodoController extends GetxController {
   var todos = [].obs;
   var isLoading = false.obs;
-  final Dio dio = Dio(); // Initialize Dio
+  final dio = Dio();
 
   @override
   void onInit() {
@@ -16,21 +18,18 @@ class TodoController extends GetxController {
   Future<void> fetchTodos() async {
     isLoading(true);
     const url = 'https://api.nstack.in/v1/todos';
-
     try {
-      final response = await dio.get(url); // Make a GET request using Dio
-
-      if (response.statusCode == 200) {
-        final json = response.data as Map;
+      final Response = await dio.get(url);
+      if (Response.statusCode == 200) {
+        final json = Response.data as Map;
         final result = json['items'] as List;
         todos.assignAll(result);
       }
-    } on DioError catch (e) {
-      // Handle Dio errors
-      _handleError(e, 'Failed to fetch todos');
-    } finally {
-      isLoading(false);
+    } on DioException catch (e) {
+      Get.snackbar('Error', 'Failed to fetch data',
+          backgroundColor: Colors.red);
     }
+    isLoading(false);
   }
 
   Future<void> deleteById(String id) async {
@@ -53,8 +52,7 @@ class TodoController extends GetxController {
     }
   }
 
-  // Handle errors and display appropriate messages
-  void _handleError(DioError e, String defaultErrorMessage) {
+  void _handleError(DioException e, String defaultErrorMessage) {
     if (e.response != null) {
       print('Error: ${e.response?.data}');
       print('Status code: ${e.response?.statusCode}');
