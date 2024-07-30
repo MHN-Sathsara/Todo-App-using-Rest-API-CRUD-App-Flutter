@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:todo_app/controllers/todo_controller.dart';
 
 class AddTodoPage extends StatefulWidget {
