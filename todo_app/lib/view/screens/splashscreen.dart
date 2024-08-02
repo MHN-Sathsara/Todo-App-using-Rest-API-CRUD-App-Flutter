@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
+import 'package:todo_app/view/screens/signin.dart';
 
 class MySplashscreen extends StatelessWidget {
   const MySplashscreen({super.key});
@@ -99,20 +100,31 @@ class MySplashscreen extends StatelessWidget {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
                                 ),
-                                child: const Center(
-                                  child: Text(
-                                    "Register",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: kBlueAccent,
-                                      fontWeight: FontWeight.bold,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.to(
+                                      () => const (),
+                                    );
+                                  },
+                                  child: const Center(
+                                    child: Text(
+                                      "Register",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: kBlueAccent,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                               const Spacer(),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.to(
+                                    () => const SignIn(),
+                                  );
+                                },
                                 child: const Center(
                                   child: Text(
                                     "Sign In",
