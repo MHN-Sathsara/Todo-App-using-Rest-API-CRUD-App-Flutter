@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/view/screens/splashscreen.dart';
 import 'package:todo_app/view/screens/too_list.dart';
 import 'package:todo_app/view/screens/add_page.dart';
 
@@ -15,12 +16,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => const TodoListPage()),
+        GetPage(name: '/', page: () => const MySplashscreen()),
+        GetPage(name: '/list', page: () => const TodoListPage()),
         GetPage(name: '/add', page: () => const AddTodoPage()),
       ],
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      home: const TodoListPage(),
+      home: const MySplashscreen(),
     );
   }
 }
