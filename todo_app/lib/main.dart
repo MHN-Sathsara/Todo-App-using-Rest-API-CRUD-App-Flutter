@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/view/screens/registration_page.dart';
+import 'package:todo_app/view/screens/signin.dart';
 import 'package:todo_app/view/screens/splashscreen.dart';
 import 'package:todo_app/view/screens/too_list.dart';
 import 'package:todo_app/view/screens/add_page.dart';
@@ -17,11 +19,13 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       getPages: [
         GetPage(name: '/', page: () => const MySplashscreen()),
+        GetPage(name: '/regp', page: () => const RegistrationPage()),
+        GetPage(name: '/signin', page: () => const SignIn()),
         GetPage(name: '/list', page: () => const TodoListPage()),
         GetPage(name: '/add', page: () => const AddTodoPage()),
       ],
       debugShowCheckedModeBanner: false,
-      home: const MySplashscreen(),
+      home: const SignIn(),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
+import 'package:todo_app/view/screens/registration_page.dart';
 import 'package:todo_app/view/screens/signin.dart';
 
 class MySplashscreen extends StatelessWidget {
@@ -51,7 +53,7 @@ class MySplashscreen extends StatelessWidget {
                         shadows: [
                           Shadow(
                             offset: Offset(0, -1),
-                            blurRadius: 10,
+                            blurRadius: 3,
                             color: Colors.grey,
                           ),
                         ],
@@ -67,80 +69,59 @@ class MySplashscreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: size.height * 0.10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                      ),
-                      child: Container(
-                        height: size.height * 0.08,
-                        width: size.width,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: kBlueAccent.withOpacity(0.9),
-                          border: Border.all(
-                            color: Colors.white,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12.withOpacity(0.05),
-                              spreadRadius: 1,
-                              blurRadius: 7,
-                              offset: const Offset(0, -1),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 150, // Set the width to the desired size
+                          height: 50, // Set the height to the desired size
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: kBlueAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              shadowColor: Colors.black12,
+                              elevation: 20,
                             ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: size.height * 0.08,
-                                width: size.width / 2.2,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Get.to(
-                                      () => const (),
-                                    );
-                                  },
-                                  child: const Center(
-                                    child: Text(
-                                      "Register",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: kBlueAccent,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  Get.to(
-                                    () => const SignIn(),
-                                  );
-                                },
-                                child: const Center(
-                                  child: Text(
-                                    "Sign In",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                            ],
+                            onPressed: () {
+                              Get.to(() => const SignIn());
+                              print('Sign in button pressed');
+                            },
+                            child: const Text(
+                              "Sign In",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        SizedBox(
+                          width: 150, // Set the width to the desired size
+                          height: 50, // Set the height to the desired size
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: kBlueAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              shadowColor: Colors.black12,
+                              elevation: 20,
+                            ),
+                            onPressed: () {
+                              //Get.to(() => const RegistrationPage());
+                              print('Register button pressed');
+                            },
+                            child: const Text(
+                              "Register",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

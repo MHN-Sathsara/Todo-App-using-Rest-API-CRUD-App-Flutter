@@ -41,6 +41,8 @@ dependencies:
 
   http: any
   dio: ^5.5.0+1
+  flutter_keyboard_visibility: ^6.0.0
+  google_fonts: ^6.2.1
 dev_dependencies:
   flutter_native_splash: ^2.0.1+1
   flutter_test:
@@ -68,6 +70,7 @@ flutter:
   assets:
      - assets/images/Spscreen.png
      - assets/images/
+     - assets/Images/apple.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
