@@ -65,7 +65,7 @@ class RegistrationPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 35),
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
@@ -185,10 +185,10 @@ class RegistrationPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
+                              //const SizedBox(width: 10),
                             ],
                           ),
-                          SizedBox(height: size.height * 0.10),
+                          SizedBox(height: size.height * 0.05),
                           RichText(
                             text: TextSpan(
                               text: "Already have an account? ",

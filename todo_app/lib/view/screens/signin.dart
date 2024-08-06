@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:todo_app/controllers/sign_in_controller.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
+import 'package:todo_app/view/screens/password_reset_page.dart.dart';
 import 'package:todo_app/view/screens/registration_page.dart';
 //import 'package:todo_app/view/widgets/custom_text_feild.dart';
 
@@ -119,7 +120,23 @@ class SignIn extends StatelessWidget {
                               obscureText: true,
                             ),
                           ),
-                          SizedBox(height: size.height * 0.05),
+                          SizedBox(height: size.height * 0.03),
+                          RichText(
+                            text: TextSpan(
+                              text: "Forgot Password? ",
+                              style: const TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Get.to(() => PasswordResetPage());
+                                },
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -147,10 +164,10 @@ class SignIn extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
+                              //const SizedBox(width: 10),
                             ],
                           ),
-                          SizedBox(height: size.height * 0.10),
+                          SizedBox(height: size.height * 0.06),
                           RichText(
                             text: TextSpan(
                               text: "Don't have an account? ",
