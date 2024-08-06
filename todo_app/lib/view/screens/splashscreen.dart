@@ -99,8 +99,8 @@ class MySplashscreen extends StatelessWidget {
                           width: 10,
                         ),
                         SizedBox(
-                          width: 150, // Set the width to the desired size
-                          height: 50, // Set the height to the desired size
+                          width: 150, // Set the width
+                          height: 50, // Set the height
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: kBlueAccent,
@@ -111,7 +111,7 @@ class MySplashscreen extends StatelessWidget {
                               elevation: 20,
                             ),
                             onPressed: () {
-                              //Get.to(() => const RegistrationPage());
+                              Get.to(() => const RegistrationPage());
                               print('Register button pressed');
                             },
                             child: const Text(

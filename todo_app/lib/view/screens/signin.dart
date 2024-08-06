@@ -137,7 +137,7 @@ class SignIn extends StatelessWidget {
                                     elevation: 20,
                                   ),
                                   onPressed: () {
-                                    //Get.to(() => const SignIn());
+                                    Get.to(() => const SignIn());
                                     print('Sign in button pressed');
                                   },
                                   child: const Text(
@@ -167,7 +167,7 @@ class SignIn extends StatelessWidget {
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      //Get.to(() => const RegistrationPage());
+                                      Get.to(() => const RegistrationPage());
                                     },
                                 ),
                                 const TextSpan(

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/add', page: () => const AddTodoPage()),
       ],
       debugShowCheckedModeBanner: false,
-      home: const SignIn(),
+      home: const MySplashscreen(),
     );
   }
 }

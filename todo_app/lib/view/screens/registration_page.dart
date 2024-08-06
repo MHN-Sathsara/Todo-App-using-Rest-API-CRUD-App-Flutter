@@ -1,5 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:todo_app/controllers/registration_controller.dart';
+import 'package:todo_app/utils/themes/colorsp.dart';
+import 'package:todo_app/view/screens/signin.dart';
 
 class RegistrationPage extends StatelessWidget {
   const RegistrationPage({super.key});
@@ -7,196 +12,221 @@ class RegistrationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final RegistrationController controller = Get.put(RegistrationController());
+
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            colors: [
-              Colors.white,
-              Colors.white,
-              Colors.white,
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: ListView(
-            children: [
-              SizedBox(height: size.height * 0.03),
-              const Text(
-                "Welcome!",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 37,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                "Create your account",
-                textAlign: TextAlign.center,
-                style:
-                    TextStyle(fontSize: 27, color: Colors.black54, height: 1.2),
-              ),
-              SizedBox(height: size.height * 0.04),
-              myTextField("Enter name", Colors.black54),
-              myTextField("Enter email", Colors.black54),
-              myTextField("Password", Colors.black26, isPassword: true),
-              SizedBox(height: size.height * 0.04),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        print('Register button tapped');
-                        // Add your register logic here
-                      },
-                      child: Container(
-                        width: size.width,
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(15),
+      body: KeyboardVisibilityBuilder(
+        builder: (context, isKeyboardVisible) {
+          return SingleChildScrollView(
+            child: Container(
+              color: kSmokeWhite,
+              height: size.height,
+              width: size.width,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: size.height * 0.38,
+                      width: size.width,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(40),
+                          bottomRight: Radius.circular(40),
                         ),
-                        child: const Center(
-                          child: Text(
-                            "Register",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 22,
-                            ),
-                          ),
+                        color: Colors.white,
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/1.jpg'),
                         ),
                       ),
                     ),
-                    SizedBox(height: size.height * 0.06),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 2,
-                          width: size.width * 0.2,
-                          color: Colors.black12,
-                        ),
-                        const Text(
-                          "  Or continue with   ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black54,
-                            fontSize: 16,
-                          ),
-                        ),
-                        Container(
-                          height: 2,
-                          width: size.width * 0.2,
-                          color: Colors.black12,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: size.height * 0.06),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        socialIcon("todo_app/assets/Images/google.png"),
-                        socialIcon("todo_app/assets/Images/apple.png"),
-                        socialIcon("todo_app/assets/Images/Facebook.png"),
-                      ],
-                    ),
-                    SizedBox(height: size.height * 0.07),
-                    Text.rich(
-                      TextSpan(
-                        text: "Already a member? ",
-                        style: const TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
+                  ),
+                  Positioned(
+                    top: size.height * 0.4,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Column(
                         children: [
-                          TextSpan(
-                            text: "Sign In",
-                            style: const TextStyle(
-                              color: Colors.blue,
+                          const Text(
+                            "Register to continue",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
+                              fontSize: 38,
+                              height: 1.2,
+                              color: kBlueAccent,
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(0, -1),
+                                  blurRadius: 3,
+                                  color: Colors.grey,
+                                ),
+                              ],
                             ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                print('Sign In tapped');
-                                // Add your sign in navigation logic here
-                              },
+                          ),
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16, right: 16),
+                            child: TextField(
+                              onChanged: (value) =>
+                                  controller.name.value = value,
+                              decoration: const InputDecoration(
+                                labelText: 'Name',
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 2.0),
+                                ),
+                                filled: true,
+                                fillColor: kSmokeWhite,
+                                contentPadding: EdgeInsets.all(16.0),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16, right: 16),
+                            child: TextField(
+                              onChanged: (value) =>
+                                  controller.email.value = value,
+                              decoration: const InputDecoration(
+                                labelText: 'Email',
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 2.0),
+                                ),
+                                filled: true,
+                                fillColor: kSmokeWhite,
+                                contentPadding: EdgeInsets.all(16.0),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16, right: 16),
+                            child: TextField(
+                              onChanged: (value) =>
+                                  controller.password.value = value,
+                              decoration: const InputDecoration(
+                                labelText: 'Password',
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 2.0),
+                                ),
+                                filled: true,
+                                fillColor: kSmokeWhite,
+                                contentPadding: EdgeInsets.all(16.0),
+                              ),
+                              obscureText: true,
+                            ),
+                          ),
+                          SizedBox(height: size.height * 0.05),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 150, // Set the width to the desired size
+                                height:
+                                    50, // Set the height to the desired size
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: kBlueAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    shadowColor: Colors.black12,
+                                    elevation: 20,
+                                  ),
+                                  onPressed: () {
+                                    // Registration logic here
+                                    print('Register button pressed');
+                                  },
+                                  child: const Text(
+                                    "Register",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                            ],
+                          ),
+                          SizedBox(height: size.height * 0.10),
+                          RichText(
+                            text: TextSpan(
+                              text: "Already have an account? ",
+                              style: const TextStyle(
+                                color: kTextColorSecondary,
+                                fontSize: 16,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: "Sign In",
+                                  style: const TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Get.to(() => const SignIn());
+                                    },
+                                ),
+                                const TextSpan(
+                                  text: " here!",
+                                  style: TextStyle(
+                                    color: kTextColorSecondary,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  GestureDetector socialIcon(String image) {
-    return GestureDetector(
-      onTap: () {
-        print('$image tapped');
-        // Add social sign-in logic here
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 32,
-          vertical: 15,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: Colors.white,
-            width: 2,
-          ),
-        ),
-        child: Image.asset(
-          image,
-          height: 35,
-        ),
-      ),
-    );
-  }
-
-  Container myTextField(String hint, Color color, {bool isPassword = false}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 25,
-        vertical: 10,
-      ),
-      child: TextField(
-        obscureText: isPassword,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 22,
-          ),
-          fillColor: Colors.white,
-          filled: true,
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          hintText: hint,
-          hintStyle: const TextStyle(
-            color: Colors.black45,
-            fontSize: 19,
-          ),
-          suffixIcon: isPassword
-              ? Icon(
-                  Icons.visibility_off_outlined,
-                  color: color,
-                )
-              : null,
-        ),
+            ),
+          );
+        },
       ),
     );
   }
