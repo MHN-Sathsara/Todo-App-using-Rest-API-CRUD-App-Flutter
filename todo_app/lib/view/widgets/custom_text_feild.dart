@@ -13,9 +13,9 @@ class CustomTextFeild extends StatelessWidget {
   const CustomTextFeild({
     super.key,
     required this.controller,
-    required this.keyboardType,
-    this.isobscureText,
-    this.obscuringCharacter,
+    this.keyboardType = TextInputType.text,
+    this.isobscureText = false,
+    this.obscuringCharacter = '*',
     this.hintText,
     this.prefixIcon,
     this.suffixIcon,
