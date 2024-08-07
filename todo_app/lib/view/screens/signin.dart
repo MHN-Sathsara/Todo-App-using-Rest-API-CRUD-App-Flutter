@@ -76,7 +76,25 @@ class SignIn extends StatelessWidget {
                               controller: _emailController,
                               decoration: const InputDecoration(
                                 labelText: 'Email',
-                                border: OutlineInputBorder(),
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 2.0),
+                                ),
+                                filled: true,
+                                fillColor: kSmokeWhite,
+                                contentPadding: EdgeInsets.all(16.0),
                               ),
                               keyboardType: TextInputType.emailAddress,
                             ),
@@ -88,7 +106,25 @@ class SignIn extends StatelessWidget {
                               controller: _passwordController,
                               decoration: const InputDecoration(
                                 labelText: 'Password',
-                                border: OutlineInputBorder(),
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.blue, width: 2.0),
+                                ),
+                                filled: true,
+                                fillColor: kSmokeWhite,
+                                contentPadding: EdgeInsets.all(16.0),
                               ),
                               obscureText: true,
                             ),

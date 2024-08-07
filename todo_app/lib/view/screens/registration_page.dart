@@ -71,7 +71,6 @@ class RegistrationPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 38),
-                          const SizedBox(height: 16.0),
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
