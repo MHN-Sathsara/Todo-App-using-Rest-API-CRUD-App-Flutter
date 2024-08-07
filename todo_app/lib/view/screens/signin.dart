@@ -1,13 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:todo_app/controllers/sign_in_controller.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
 import 'package:todo_app/view/screens/password_reset_page.dart.dart';
 import 'package:todo_app/view/screens/registration_page.dart';
-//import 'package:todo_app/view/widgets/custom_text_feild.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -16,8 +14,6 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final SignInController controller = Get.put(SignInController());
-    // final _emailController = TextEditingController();
-    // final _passController = TextEditingController();
 
     return Scaffold(
       body: KeyboardVisibilityBuilder(

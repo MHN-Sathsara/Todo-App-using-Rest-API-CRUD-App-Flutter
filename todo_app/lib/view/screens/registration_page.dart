@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:todo_app/controllers/registration_controller.dart';
+import 'package:todo_app/services/auth_service.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
 import 'package:todo_app/view/screens/signin.dart';
 
@@ -12,7 +13,11 @@ class RegistrationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final RegistrationController controller = Get.put(RegistrationController());
+
+    final RegistrationController registrationController =
+        Get.put(RegistrationController());
+    final TextEditingController _emailController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
 
     return Scaffold(
       body: KeyboardVisibilityBuilder(
@@ -65,42 +70,14 @@ class RegistrationPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 35),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16, right: 16),
-                            child: TextField(
-                              onChanged: (value) =>
-                                  controller.name.value = value,
-                              decoration: const InputDecoration(
-                                labelText: 'Name',
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
-                                  borderSide: BorderSide(
-                                      color: Colors.blue, width: 1.0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
-                                  borderSide: BorderSide(
-                                      color: Colors.blue, width: 2.0),
-                                ),
-                                filled: true,
-                                fillColor: kSmokeWhite,
-                                contentPadding: EdgeInsets.all(16.0),
-                              ),
-                            ),
-                          ),
+                          const SizedBox(height: 38),
                           const SizedBox(height: 16.0),
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
+                              controller: _emailController,
                               onChanged: (value) =>
-                                  controller.email.value = value,
+                                  registrationController.email.value = value,
                               decoration: const InputDecoration(
                                 labelText: 'Email',
                                 border: OutlineInputBorder(
@@ -130,8 +107,9 @@ class RegistrationPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
+                              controller: _passwordController,
                               onChanged: (value) =>
-                                  controller.password.value = value,
+                                  registrationController.password.value = value,
                               decoration: const InputDecoration(
                                 labelText: 'Password',
                                 border: OutlineInputBorder(
@@ -175,7 +153,16 @@ class RegistrationPage extends StatelessWidget {
                                     elevation: 20,
                                   ),
                                   onPressed: () {
-                                    // Registration logic here
+                                    registrationController.email.value =
+                                        _emailController.text;
+                                    registrationController.password.value =
+                                        _passwordController.text;
+                                    AuthService().Regin(
+                                        email:
+                                            registrationController.email.value,
+                                        password: registrationController
+                                            .password.value,
+                                        context: context);
                                     print('Register button pressed');
                                   },
                                   child: const Text(
@@ -188,7 +175,7 @@ class RegistrationPage extends StatelessWidget {
                               //const SizedBox(width: 10),
                             ],
                           ),
-                          SizedBox(height: size.height * 0.05),
+                          SizedBox(height: size.height * 0.08),
                           RichText(
                             text: TextSpan(
                               text: "Already have an account? ",
