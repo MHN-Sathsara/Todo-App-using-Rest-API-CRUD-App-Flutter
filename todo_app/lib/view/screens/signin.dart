@@ -6,6 +6,7 @@ import 'package:todo_app/controllers/sign_in_controller.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
 import 'package:todo_app/view/screens/password_reset_page.dart.dart';
 import 'package:todo_app/view/screens/registration_page.dart';
+import 'package:todo_app/services/auth_service.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -14,6 +15,8 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final SignInController controller = Get.put(SignInController());
+    final TextEditingController _emailController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
 
     return Scaffold(
       body: KeyboardVisibilityBuilder(
@@ -67,35 +70,10 @@ class SignIn extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          // CustomTextFeild(
-                          //   controller: _emailController,
-                          //   hintText: 'Email',
-                          //   keyboardType: TextInputType.emailAddress,
-                          //   prefixIcon: SvgPicture.asset(
-                          //     'assets/icons/email-icon.svg',
-                          //     fit: BoxFit.scaleDown,
-                          //   ),
-                          // ),
-                          // const SizedBox(height: 10),
-                          // CustomTextFeild(
-                          //   controller: _passController,
-                          //   hintText: 'Password',
-                          //   keyboardType: TextInputType.emailAddress,
-                          //   prefixIcon: SvgPicture.asset(
-                          //     'assets/icons/pass-icon.svg',
-                          //     fit: BoxFit.scaleDown,
-                          //   ),
-                          //   suffixIcon: SvgPicture.asset(
-                          //     'assets/icons/eye-icon.svg',
-                          //     fit: BoxFit.scaleDown,
-                          //   ),
-                          // ),
-
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
-                              onChanged: (value) =>
-                                  controller.email.value = value,
+                              controller: _emailController,
                               decoration: const InputDecoration(
                                 labelText: 'Email',
                                 border: OutlineInputBorder(),
@@ -107,8 +85,7 @@ class SignIn extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
-                              onChanged: (value) =>
-                                  controller.password.value = value,
+                              controller: _passwordController,
                               decoration: const InputDecoration(
                                 labelText: 'Password',
                                 border: OutlineInputBorder(),
@@ -150,8 +127,15 @@ class SignIn extends StatelessWidget {
                                     elevation: 20,
                                   ),
                                   onPressed: () {
-                                    Get.to(() => const SignIn());
-                                    print('Sign in button pressed');
+                                    controller.email.value =
+                                        _emailController.text;
+                                    controller.password.value =
+                                        _passwordController.text;
+                                    AuthService().signin(
+                                        email: controller.email.value,
+                                        password: controller.password.value,
+                                        context: context);
+                                    print('Login button pressed');
                                   },
                                   child: const Text(
                                     "Sign In",
@@ -160,7 +144,6 @@ class SignIn extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              //const SizedBox(width: 10),
                             ],
                           ),
                           SizedBox(height: size.height * 0.06),
