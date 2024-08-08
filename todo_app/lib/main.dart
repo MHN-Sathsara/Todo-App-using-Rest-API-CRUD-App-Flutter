@@ -7,7 +7,6 @@ import 'package:todo_app/view/screens/signin.dart';
 import 'package:todo_app/view/screens/splashscreen.dart';
 import 'package:todo_app/view/screens/too_list.dart';
 import 'package:todo_app/view/screens/add_page.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

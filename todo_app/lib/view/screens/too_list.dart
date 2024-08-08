@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/todo_controller.dart';
+import 'package:todo_app/services/auth_service.dart';
 import 'package:todo_app/view/screens/add_page.dart';
 
 class TodoListPage extends StatelessWidget {
@@ -18,6 +19,12 @@ class TodoListPage extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.logout_rounded, color: Colors.black),
+          onPressed: () {
+            _showLogoutDialog(context);
+          },
         ),
       ),
       body: Obx(() {
@@ -84,5 +91,33 @@ class TodoListPage extends StatelessWidget {
     await Navigator.push(context, route);
     final TodoController todoController = Get.find();
     todoController.fetchTodos();
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Logout'),
+            content: const Text('Do you want to logout?'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text('Logout'),
+                onPressed: () async {
+                  await AuthService().signout(context: context);
+                  // Navigator.of(context).pop(); // Close the dialog
+                  // Navigator.of(context).pop(); // Navigate back
+                  // Add your logout logic here if needed
+                },
+              ),
+            ],
+          );
+        });
   }
 }
