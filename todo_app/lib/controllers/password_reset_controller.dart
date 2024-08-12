@@ -20,9 +20,9 @@ class PasswordResetController extends GetxController {
     }
 
     try {
-      print("Attempting to send password reset email to: ${email.value}");
+      // print("Attempting to send password reset email to: ${email.value}");
       await _auth.sendPasswordResetEmail(email: email.value);
-      print("Password reset email sent successfully!");
+      // print("Password reset email sent successfully!");
       Get.snackbar(
         'Success',
         'Password Reset Email has been sent!',
@@ -31,7 +31,7 @@ class PasswordResetController extends GetxController {
         colorText: Colors.white,
       );
     } on FirebaseAuthException catch (e) {
-      print("FirebaseAuthException: ${e.code}");
+      // print("FirebaseAuthException: ${e.code}");
       if (e.code == 'user-not-found') {
         Get.snackbar(
           'Error',
@@ -50,7 +50,7 @@ class PasswordResetController extends GetxController {
         );
       }
     } catch (e) {
-      print("An unknown error occurred: $e");
+      // print("An unknown error occurred: $e");
       Get.snackbar(
         'Error',
         'An error occurred while trying to send the reset email.',

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
 import 'package:todo_app/view/screens/registration_page.dart';
@@ -86,7 +85,7 @@ class MySplashscreen extends StatelessWidget {
                             ),
                             onPressed: () {
                               Get.to(() => const SignIn());
-                              print('Sign in button pressed');
+                              // print('Sign in button pressed');
                             },
                             child: const Text(
                               "Sign In",
@@ -112,7 +111,7 @@ class MySplashscreen extends StatelessWidget {
                             ),
                             onPressed: () {
                               Get.to(() => const RegistrationPage());
-                              print('Register button pressed');
+                              // print('Register button pressed');
                             },
                             child: const Text(
                               "Register",

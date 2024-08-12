@@ -11,6 +11,8 @@ class TodoListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final TodoController todoController = Get.put(TodoController());
 
+    print(Text('Todo list loading'));
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -21,7 +23,7 @@ class TodoListPage extends StatelessWidget {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.logout_rounded, color: Colors.black),
+          icon: const Icon(Icons.logout_rounded, color: Colors.black),
           onPressed: () {
             _showLogoutDialog(context);
           },

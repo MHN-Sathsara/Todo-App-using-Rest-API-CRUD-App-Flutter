@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:todo_app/view/widgets/wrapper.dart';
 
 import '../view/screens/too_list.dart';
-import '../view/screens/signin.dart';
+// import '../view/screens/signin.dart';
 
 class AuthService {
-  Future<void> Regin({
+  Future<void> regin({
     required String email,
     required String password,
     required BuildContext context,
@@ -17,6 +18,7 @@ class AuthService {
 
       await Future.delayed(const Duration(seconds: 1));
       Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => const TodoListPage()));
@@ -35,7 +37,7 @@ class AuthService {
         textColor: Colors.white,
         fontSize: 14.0,
       );
-    } catch (e) {}
+    }
   }
 
   Future<void> signin(
@@ -48,9 +50,12 @@ class AuthService {
 
       await Future.delayed(const Duration(seconds: 1));
       Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const TodoListPage()));
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const TodoListPage(),
+        ),
+      );
     } on FirebaseAuthException catch (e) {
       String message = '';
       if (e.code == 'invalid-email') {
@@ -66,13 +71,18 @@ class AuthService {
         textColor: Colors.white,
         fontSize: 14.0,
       );
-    } catch (e) {}
+    }
   }
 
   Future<void> signout({required BuildContext context}) async {
     await FirebaseAuth.instance.signOut();
     await Future.delayed(const Duration(seconds: 1));
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => SignIn()));
+    Navigator.pushReplacement(
+      // ignore: use_build_context_synchronously
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => const Wrapper(),
+      ),
+    );
   }
 }

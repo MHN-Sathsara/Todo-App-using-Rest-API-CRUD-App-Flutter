@@ -23,7 +23,7 @@ class TodoController extends GetxController {
         final result = json['items'] as List;
         todos.assignAll(result);
       }
-    } on DioException catch (e) {
+    } on DioException {
       Get.snackbar('Error', 'Failed to fetch data',
           backgroundColor: Colors.red);
     }
@@ -44,7 +44,7 @@ class TodoController extends GetxController {
         Get.snackbar('Error', 'Failed to delete todo',
             backgroundColor: Colors.red);
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       // Handle Dio errors
       _handleError(e, 'Failed to delete todo');
     }
@@ -52,12 +52,12 @@ class TodoController extends GetxController {
 
   void _handleError(DioException e, String defaultErrorMessage) {
     if (e.response != null) {
-      print('Error: ${e.response?.data}');
-      print('Status code: ${e.response?.statusCode}');
+      // print('Error: ${e.response?.data}');
+      // print('Status code: ${e.response?.statusCode}');
       Get.snackbar('Error', e.response?.data['message'] ?? defaultErrorMessage,
           backgroundColor: Colors.red);
     } else {
-      print('Error: ${e.message}');
+      // print('Error: ${e.message}');
       Get.snackbar('Error', defaultErrorMessage, backgroundColor: Colors.red);
     }
   }

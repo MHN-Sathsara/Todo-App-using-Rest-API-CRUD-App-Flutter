@@ -16,8 +16,8 @@ class RegistrationPage extends StatelessWidget {
 
     final RegistrationController registrationController =
         Get.put(RegistrationController());
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       body: KeyboardVisibilityBuilder(
@@ -74,7 +74,7 @@ class RegistrationPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
-                              controller: _emailController,
+                              controller: emailController,
                               onChanged: (value) =>
                                   registrationController.email.value = value,
                               decoration: const InputDecoration(
@@ -106,7 +106,7 @@ class RegistrationPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
-                              controller: _passwordController,
+                              controller: passwordController,
                               onChanged: (value) =>
                                   registrationController.password.value = value,
                               decoration: const InputDecoration(
@@ -153,16 +153,16 @@ class RegistrationPage extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     registrationController.email.value =
-                                        _emailController.text;
+                                        emailController.text;
                                     registrationController.password.value =
-                                        _passwordController.text;
-                                    AuthService().Regin(
+                                        passwordController.text;
+                                    AuthService().regin(
                                         email:
                                             registrationController.email.value,
                                         password: registrationController
                                             .password.value,
                                         context: context);
-                                    print('Register button pressed');
+                                    // print('Register button pressed');
                                   },
                                   child: const Text(
                                     "Register",

@@ -15,8 +15,8 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final SignInController controller = Get.put(SignInController());
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       body: KeyboardVisibilityBuilder(
@@ -73,7 +73,7 @@ class SignIn extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
-                              controller: _emailController,
+                              controller: emailController,
                               decoration: const InputDecoration(
                                 labelText: 'Email',
                                 border: OutlineInputBorder(
@@ -103,7 +103,7 @@ class SignIn extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextField(
-                              controller: _passwordController,
+                              controller: passwordController,
                               decoration: const InputDecoration(
                                 labelText: 'Password',
                                 border: OutlineInputBorder(
@@ -139,7 +139,7 @@ class SignIn extends StatelessWidget {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Get.to(() => PasswordResetPage());
+                                  Get.to(() => const PasswordResetPage());
                                 },
                             ),
                           ),
@@ -164,14 +164,14 @@ class SignIn extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     controller.email.value =
-                                        _emailController.text;
+                                        emailController.text;
                                     controller.password.value =
-                                        _passwordController.text;
+                                        passwordController.text;
                                     AuthService().signin(
                                         email: controller.email.value,
                                         password: controller.password.value,
                                         context: context);
-                                    print('Login button pressed');
+                                    // print('Login button pressed');
                                   },
                                   child: const Text(
                                     "Sign In",

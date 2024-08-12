@@ -4,6 +4,8 @@ import 'package:todo_app/controllers/password_reset_controller.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
 
 class PasswordResetPage extends StatefulWidget {
+  const PasswordResetPage({super.key});
+
   @override
   State<PasswordResetPage> createState() => _PasswordResetPageState();
 }
@@ -16,7 +18,6 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
   Widget build(BuildContext context) {
     final PasswordResetController controller =
         Get.put(PasswordResetController());
-    Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
