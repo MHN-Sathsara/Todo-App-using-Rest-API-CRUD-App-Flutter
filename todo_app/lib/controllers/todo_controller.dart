@@ -1,64 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
+import 'package:hive/hive.dart';
 
 class TodoController extends GetxController {
-  var todos = [].obs;
+  var todos = <Map<String, dynamic>>[].obs;
   var isLoading = false.obs;
   final dio = Dio();
+  Box? todoBox;
+
+  static const String _url = 'https://api.nstack.in/v1/todos';
+  static const String _fetchErrorMessage = 'Failed to fetch data';
+  static const String _deleteErrorMessage = 'Failed to delete todo';
+  static const String _deleteSuccessMessage = 'Todo Deleted Successfully';
 
   @override
   void onInit() {
-    fetchTodos();
     super.onInit();
+    todoBox = Hive.box('todos');
+    fetchTodosFromLocal(); // Fetch local todos first
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    fetchTodos(); // Fetch online todos after the widget is ready
   }
 
   Future<void> fetchTodos() async {
+    if (isLoading.value) return;
     isLoading(true);
-    const url = 'https://api.nstack.in/v1/todos';
+
     try {
-      final response = await dio.get(url);
+      final response = await dio.get(_url);
       if (response.statusCode == 200) {
-        final json = response.data as Map;
+        final json = response.data as Map<String, dynamic>;
         final result = json['items'] as List;
-        todos.assignAll(result);
+        todos.assignAll(result.cast<Map<String, dynamic>>());
+        await _saveTodosToLocal(result);
+      } else {
+        _handleError(response.statusCode, _fetchErrorMessage);
       }
-    } on DioException {
-      Get.snackbar('Error', 'Failed to fetch data',
-          backgroundColor: Colors.red);
+    } on DioException catch (e) {
+      _handleError(e, _fetchErrorMessage);
+    } finally {
+      isLoading(false);
     }
-    isLoading(false);
   }
 
   Future<void> deleteById(String id) async {
-    final url = 'https://api.nstack.in/v1/todos/$id';
+    final url = '$_url/$id';
 
     try {
-      final response = await dio.delete(url); // Make a DELETE request using Dio
-
+      final response = await dio.delete(url);
       if (response.statusCode == 200) {
         todos.removeWhere((item) => item['_id'] == id);
-        Get.snackbar('Success', 'Todo Deleted Successfully',
+        await _saveTodosToLocal(todos);
+        Get.snackbar('Success', _deleteSuccessMessage,
             backgroundColor: Colors.green);
       } else {
-        Get.snackbar('Error', 'Failed to delete todo',
-            backgroundColor: Colors.red);
+        _handleError(response.statusCode, _deleteErrorMessage);
       }
     } on DioException catch (e) {
-      // Handle Dio errors
-      _handleError(e, 'Failed to delete todo');
+      _handleError(e, _deleteErrorMessage);
     }
   }
 
-  void _handleError(DioException e, String defaultErrorMessage) {
-    if (e.response != null) {
-      // print('Error: ${e.response?.data}');
-      // print('Status code: ${e.response?.statusCode}');
-      Get.snackbar('Error', e.response?.data['message'] ?? defaultErrorMessage,
-          backgroundColor: Colors.red);
-    } else {
-      // print('Error: ${e.message}');
-      Get.snackbar('Error', defaultErrorMessage, backgroundColor: Colors.red);
+  Future<void> _saveTodosToLocal(List todos) async {
+    await todoBox?.put('todos', todos);
+  }
+
+  Future<void> fetchTodosFromLocal() async {
+    final localTodos = todoBox?.get('todos');
+
+    if (localTodos != null && localTodos is List) {
+      try {
+        todos.assignAll(
+            localTodos.map((item) => Map<String, dynamic>.from(item)).toList());
+      } catch (e) {
+        Get.snackbar('Error', 'Failed to load local todos',
+            backgroundColor: Colors.red);
+      }
     }
+  }
+
+  void _handleError(dynamic error, String defaultErrorMessage) {
+    String errorMessage = defaultErrorMessage;
+
+    if (error is DioException && error.response != null) {
+      errorMessage = error.response?.data['message'] ?? defaultErrorMessage;
+    } else if (error is DioException) {
+      errorMessage = error.message?.isNotEmpty == true
+          ? error.message!
+          : defaultErrorMessage;
+    }
+
+    Get.snackbar('Error', errorMessage, backgroundColor: Colors.red);
   }
 }

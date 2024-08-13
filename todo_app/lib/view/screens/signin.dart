@@ -167,7 +167,7 @@ class SignIn extends StatelessWidget {
                                         emailController.text;
                                     controller.password.value =
                                         passwordController.text;
-                                    AuthService().signin(
+                                    AuthService().signIn(
                                         email: controller.email.value,
                                         password: controller.password.value,
                                         context: context);

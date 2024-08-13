@@ -1,88 +1,109 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:todo_app/view/widgets/wrapper.dart';
-
-import '../view/screens/too_list.dart';
-// import '../view/screens/signin.dart';
+import 'package:todo_app/view/screens/splashscreen.dart';
+import 'package:todo_app/view/screens/too_list.dart';
+// import 'package:todo_app/view/widgets/wrapper.dart';
 
 class AuthService {
-  Future<void> regin({
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  static const String _weakPasswordErrorCode = 'weak-password';
+  static const String _emailAlreadyInUseErrorCode = 'email-already-in-use';
+  static const String _invalidEmailErrorCode = 'invalid-email';
+  static const String _wrongPasswordErrorCode = 'wrong-password';
+
+  static const String _weakPasswordErrorMessage =
+      'The password provided is too weak.';
+  static const String _emailAlreadyInUseErrorMessage =
+      'An account already exists with that email.';
+  static const String _invalidEmailErrorMessage =
+      'No user found for that email.';
+  static const String _wrongPasswordErrorMessage =
+      'Wrong password provided for that user.';
+
+  User? checkUserLoginState() {
+    return _auth.currentUser;
+  }
+
+  Future<void> register({
     required String email,
     required String password,
     required BuildContext context,
   }) async {
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushReplacement(
-          // ignore: use_build_context_synchronously
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const TodoListPage()));
+      _navigateToTodoListPage(context);
     } on FirebaseAuthException catch (e) {
-      String message = '';
-      if (e.code == 'weak-password') {
-        message = 'The password provided is too weak.';
-      } else if (e.code == 'email-already-in-use') {
-        message = 'An account already exists with that email.';
-      }
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+      _handleAuthException(e, context);
     }
   }
 
-  Future<void> signin(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
+  Future<void> signIn({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.pushReplacement(
-        // ignore: use_build_context_synchronously
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => const TodoListPage(),
-        ),
-      );
+      _navigateToTodoListPage(context);
     } on FirebaseAuthException catch (e) {
-      String message = '';
-      if (e.code == 'invalid-email') {
-        message = 'No user found for that email.';
-      } else if (e.code == 'invalid-credential') {
-        message = 'Wrong password provided for that user.';
-      }
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
+      _handleAuthException(e, context);
     }
   }
 
-  Future<void> signout({required BuildContext context}) async {
-    await FirebaseAuth.instance.signOut();
-    await Future.delayed(const Duration(seconds: 1));
-    Navigator.pushReplacement(
-      // ignore: use_build_context_synchronously
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => const Wrapper(),
-      ),
+  Future<void> signOut(BuildContext context) async {
+    await _auth.signOut();
+    _navigateToWrapperPage(context);
+  }
+
+  void _handleAuthException(FirebaseAuthException e, BuildContext context) {
+    String message = '';
+    switch (e.code) {
+      case _weakPasswordErrorCode:
+        message = _weakPasswordErrorMessage;
+        break;
+      case _emailAlreadyInUseErrorCode:
+        message = _emailAlreadyInUseErrorMessage;
+        break;
+      case _invalidEmailErrorCode:
+        message = _invalidEmailErrorMessage;
+        break;
+      case _wrongPasswordErrorCode:
+        message = _wrongPasswordErrorMessage;
+        break;
+      default:
+        message = 'An error occurred. Please try again later.';
+    }
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.SNACKBAR,
+      backgroundColor: Colors.black54,
+      textColor: Colors.white,
+      fontSize: 14.0,
     );
   }
+
+  void _navigateToTodoListPage(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const TodoListPage()),
+    );
+  }
+
+  void _navigateToWrapperPage(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MySplashscreen()),
+    );
+  }
+
+  void regin(
+      {required String email,
+      required String password,
+      required BuildContext context}) {}
 }

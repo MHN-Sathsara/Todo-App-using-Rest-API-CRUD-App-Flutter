@@ -10,58 +10,40 @@ class TodoListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TodoController todoController = Get.put(TodoController());
-
-    print(Text('Todo list loading'));
+    // Fetch local todos before calling the online fetch
+    todoController.fetchTodosFromLocal();
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
           'Todo List',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
           icon: const Icon(Icons.logout_rounded, color: Colors.black),
-          onPressed: () {
-            _showLogoutDialog(context);
-          },
+          onPressed: () => _showLogoutDialog(context),
         ),
       ),
       body: Obx(() {
         if (todoController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
+        } else if (todoController.todos.isEmpty) {
+          return const Center(child: Text("No todos available"));
         } else {
           return RefreshIndicator(
             onRefresh: todoController.fetchTodos,
             child: ListView.builder(
               itemCount: todoController.todos.length,
               itemBuilder: (context, index) {
-                final item = todoController.todos[index] as Map;
+                final item =
+                    todoController.todos[index].cast<String, dynamic>();
                 final id = item['_id'] as String;
                 return ListTile(
                   leading: CircleAvatar(child: Text('${index + 1}')),
-                  title: Text(item['title']),
-                  subtitle: Text(item['description']),
-                  trailing: PopupMenuButton(
-                    onSelected: (value) {
-                      if (value == 'edit') {
-                        // edit
-                        navigateToEditPage(context, item);
-                      } else if (value == 'delete') {
-                        // delete
-                        todoController.deleteById(id);
-                      }
-                    },
-                    itemBuilder: (context) {
-                      return [
-                        const PopupMenuItem(value: 'edit', child: Text('Edit')),
-                        const PopupMenuItem(
-                            value: 'delete', child: Text('Delete')),
-                      ];
-                    },
-                  ),
+                  title: Text(item['title'] ?? 'No Title'),
+                  subtitle: Text(item['description'] ?? 'No Description'),
+                  trailing: _buildPopupMenu(context, item, id, todoController),
                 );
               },
             ),
@@ -69,57 +51,71 @@ class TodoListPage extends StatelessWidget {
         }
       }),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          navigateToAddTodoPage(context);
-        },
+        onPressed: () => navigateToAddTodoPage(context),
         label: const Text('Add Todo'),
       ),
     );
   }
 
-  Future<void> navigateToEditPage(BuildContext context, Map item) async {
-    final route = MaterialPageRoute(
-      builder: (context) => AddTodoPage(todo: item),
+  PopupMenuButton<String> _buildPopupMenu(BuildContext context,
+      Map<String, dynamic> item, String id, TodoController todoController) {
+    return PopupMenuButton<String>(
+      onSelected: (value) {
+        if (value == 'edit') {
+          navigateToEditPage(context, item);
+        } else if (value == 'delete') {
+          todoController.deleteById(id);
+        }
+      },
+      itemBuilder: (context) {
+        return [
+          const PopupMenuItem(value: 'edit', child: Text('Edit')),
+          const PopupMenuItem(value: 'delete', child: Text('Delete')),
+        ];
+      },
     );
-    await Navigator.push(context, route);
+  }
+
+  Future<void> navigateToEditPage(
+      BuildContext context, Map<String, dynamic> item) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddTodoPage(todo: item)),
+    );
     final TodoController todoController = Get.find();
     todoController.fetchTodos();
   }
 
   Future<void> navigateToAddTodoPage(BuildContext context) async {
-    final route = MaterialPageRoute(
-      builder: (context) => const AddTodoPage(),
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddTodoPage()),
     );
-    await Navigator.push(context, route);
     final TodoController todoController = Get.find();
     todoController.fetchTodos();
   }
 
   void _showLogoutDialog(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Logout'),
-            content: const Text('Do you want to logout?'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Cancel'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: const Text('Logout'),
-                onPressed: () async {
-                  await AuthService().signout(context: context);
-                  // Navigator.of(context).pop(); // Close the dialog
-                  // Navigator.of(context).pop(); // Navigate back
-                  // Add your logout logic here if needed
-                },
-              ),
-            ],
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Do you want to logout?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Logout'),
+              onPressed: () async {
+                await AuthService().signOut(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
