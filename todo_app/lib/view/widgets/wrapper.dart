@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/services/auth_service.dart';
-import '../screens/signin.dart';
+import 'package:todo_app/view/screens/splashscreen.dart';
+// import '../screens/signin.dart';
 import '../screens/too_list.dart';
 
 class Wrapper extends StatelessWidget {
@@ -15,7 +16,7 @@ class Wrapper extends StatelessWidget {
     if (_authService.checkUserLoginState() != null) {
       return const TodoListPage();
     } else {
-      return const SignIn();
+      return const MySplashscreen();
     }
   }
 }

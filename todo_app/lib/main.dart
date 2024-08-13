@@ -8,7 +8,7 @@ import 'package:todo_app/view/screens/signin.dart';
 import 'package:todo_app/view/screens/splashscreen.dart';
 import 'package:todo_app/view/screens/too_list.dart';
 import 'package:todo_app/view/screens/add_page.dart';
-import 'package:hive/hive.dart';
+// import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 Future<void> main() async {

@@ -53,7 +53,7 @@ class SignIn extends StatelessWidget {
                       child: Column(
                         children: [
                           const Text(
-                            "Please Sign In to continue",
+                            "Please Sign In to \ncontinue",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -69,10 +69,10 @@ class SignIn extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 18),
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
-                            child: TextField(
+                            child: TextFormField(
                               controller: emailController,
                               decoration: const InputDecoration(
                                 labelText: 'Email',
@@ -97,12 +97,13 @@ class SignIn extends StatelessWidget {
                                 contentPadding: EdgeInsets.all(16.0),
                               ),
                               keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
                             ),
                           ),
                           const SizedBox(height: 16.0),
                           Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
-                            child: TextField(
+                            child: TextFormField(
                               controller: passwordController,
                               decoration: const InputDecoration(
                                 labelText: 'Password',
@@ -127,6 +128,16 @@ class SignIn extends StatelessWidget {
                                 contentPadding: EdgeInsets.all(16.0),
                               ),
                               obscureText: true,
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) {
+                                controller.email.value = emailController.text;
+                                controller.password.value =
+                                    passwordController.text;
+                                AuthService().signIn(
+                                    email: controller.email.value,
+                                    password: controller.password.value,
+                                    context: context);
+                              },
                             ),
                           ),
                           SizedBox(height: size.height * 0.03),
@@ -150,9 +161,8 @@ class SignIn extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
-                                width: 150, // Set the width to the desired size
-                                height:
-                                    50, // Set the height to the desired size
+                                width: 150,
+                                height: 50,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: kBlueAccent,
@@ -171,7 +181,6 @@ class SignIn extends StatelessWidget {
                                         email: controller.email.value,
                                         password: controller.password.value,
                                         context: context);
-                                    // print('Login button pressed');
                                   },
                                   child: const Text(
                                     "Sign In",

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/todo_controller.dart';
 import 'package:todo_app/services/auth_service.dart';
+import 'package:todo_app/utils/themes/colorsp.dart';
 import 'package:todo_app/view/screens/add_page.dart';
 
 class TodoListPage extends StatelessWidget {
@@ -29,7 +30,12 @@ class TodoListPage extends StatelessWidget {
         if (todoController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         } else if (todoController.todos.isEmpty) {
-          return const Center(child: Text("No todos available"));
+          return const Center(
+            child: Text(
+              "No todos available",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          );
         } else {
           return RefreshIndicator(
             onRefresh: todoController.fetchTodos,
@@ -40,8 +46,16 @@ class TodoListPage extends StatelessWidget {
                     todoController.todos[index].cast<String, dynamic>();
                 final id = item['_id'] as String;
                 return ListTile(
-                  leading: CircleAvatar(child: Text('${index + 1}')),
-                  title: Text(item['title'] ?? 'No Title'),
+                  leading: CircleAvatar(
+                      backgroundColor: kBlueAccent,
+                      foregroundColor: Colors.white,
+                      child: Text('${index + 1}')),
+                  title: Text(
+                    item['title'] ?? 'No Title',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   subtitle: Text(item['description'] ?? 'No Description'),
                   trailing: _buildPopupMenu(context, item, id, todoController),
                 );
@@ -52,7 +66,11 @@ class TodoListPage extends StatelessWidget {
       }),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => navigateToAddTodoPage(context),
-        label: const Text('Add Todo'),
+        label: const Text(
+          'Add Todo',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: kButtonColor,
       ),
     );
   }
