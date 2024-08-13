@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/todo_controller.dart';
+import 'package:todo_app/utils/themes/colorsp.dart';
 
 class AddTodoPage extends StatefulWidget {
   final Map? todo;
@@ -67,14 +68,24 @@ class _AddTodoPageState extends State<AddTodoPage> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: isEdit
-                ? () => updateData(todoController)
-                : () => submitData(todoController),
-            child: Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Text(isEdit ? 'Update' : 'Submit'),
-            ),
-          ),
+              onPressed: isEdit
+                  ? () => updateData(todoController)
+                  : () => submitData(todoController),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kButtonColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                shadowColor: Colors.black12,
+                elevation: 20,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Text(
+                  isEdit ? 'Update' : 'Submit',
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              )),
         ],
       ),
     );

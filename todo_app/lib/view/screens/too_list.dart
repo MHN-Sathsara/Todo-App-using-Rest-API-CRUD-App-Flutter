@@ -28,7 +28,10 @@ class TodoListPage extends StatelessWidget {
       ),
       body: Obx(() {
         if (todoController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CircularProgressIndicator(
+            color: kBlueAccent,
+          ));
         } else if (todoController.todos.isEmpty) {
           return const Center(
             child: Text(
@@ -38,6 +41,7 @@ class TodoListPage extends StatelessWidget {
           );
         } else {
           return RefreshIndicator(
+            color: kBlueAccent,
             onRefresh: todoController.fetchTodos,
             child: ListView.builder(
               itemCount: todoController.todos.length,
