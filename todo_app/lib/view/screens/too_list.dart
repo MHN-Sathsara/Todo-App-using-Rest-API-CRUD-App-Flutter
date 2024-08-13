@@ -126,11 +126,17 @@ class TodoListPage extends StatelessWidget {
           content: const Text('Do you want to logout?'),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: kBlueAccent),
+              ),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: const Text('Logout'),
+              child: const Text(
+                'Logout',
+                style: TextStyle(color: kBlueAccent),
+              ),
               onPressed: () async {
                 await AuthService().signOut(context);
               },
