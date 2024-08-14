@@ -2,12 +2,14 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/view/screens/splashscreen.dart';
 import 'package:todo_app/view/screens/too_list.dart';
 // import 'package:todo_app/view/widgets/wrapper.dart';
 
-class AuthService {
+class AuthService extends GetxService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static const String _weakPasswordErrorCode = 'weak-password';
@@ -28,6 +30,18 @@ class AuthService {
     return _auth.currentUser;
   }
 
+  //save login satet in shared preference
+  Future<void> saveLoginState(bool isLoggedIn) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', isLoggedIn);
+  }
+
+  //retrun login state from shared preference
+  Future<bool> getLoginState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
+  }
+
   Future<void> register({
     required String email,
     required String password,
@@ -36,6 +50,7 @@ class AuthService {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      await saveLoginState(true); //savelogin
       await Future.delayed(const Duration(seconds: 1));
       _navigateToTodoListPage(context);
     } on FirebaseAuthException catch (e) {
@@ -50,6 +65,7 @@ class AuthService {
   }) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await saveLoginState(true); //savelogin
       await Future.delayed(const Duration(seconds: 1));
       _navigateToTodoListPage(context);
     } on FirebaseAuthException catch (e) {
@@ -59,6 +75,7 @@ class AuthService {
 
   Future<void> signOut(BuildContext context) async {
     await _auth.signOut();
+    await saveLoginState(false); // Clear login state
     _navigateToWrapperPage(context);
   }
 

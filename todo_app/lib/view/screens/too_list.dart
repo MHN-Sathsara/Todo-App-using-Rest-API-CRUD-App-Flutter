@@ -11,8 +11,6 @@ class TodoListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TodoController todoController = Get.put(TodoController());
-    // Fetch local todos before calling the online fetch
-    todoController.fetchTodosFromLocal();
 
     return Scaffold(
       appBar: AppBar(

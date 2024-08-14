@@ -4,9 +4,8 @@ import 'package:get/get.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:todo_app/controllers/sign_in_controller.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
-import 'package:todo_app/view/screens/password_reset_page.dart.dart';
+import 'package:todo_app/view/screens/password_reset_page.dart';
 import 'package:todo_app/view/screens/registration_page.dart';
-import 'package:todo_app/services/auth_service.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -74,6 +73,7 @@ class SignIn extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextFormField(
                               controller: emailController,
+                              onChanged: controller.updateEmail,
                               decoration: const InputDecoration(
                                 labelText: 'Email',
                                 border: OutlineInputBorder(
@@ -105,6 +105,7 @@ class SignIn extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 16, right: 16),
                             child: TextFormField(
                               controller: passwordController,
+                              onChanged: controller.updatePassword,
                               decoration: const InputDecoration(
                                 labelText: 'Password',
                                 border: OutlineInputBorder(
@@ -130,13 +131,7 @@ class SignIn extends StatelessWidget {
                               obscureText: true,
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (_) {
-                                controller.email.value = emailController.text;
-                                controller.password.value =
-                                    passwordController.text;
-                                AuthService().signIn(
-                                    email: controller.email.value,
-                                    password: controller.password.value,
-                                    context: context);
+                                controller.signIn(context);
                               },
                             ),
                           ),
@@ -173,14 +168,7 @@ class SignIn extends StatelessWidget {
                                     elevation: 20,
                                   ),
                                   onPressed: () {
-                                    controller.email.value =
-                                        emailController.text;
-                                    controller.password.value =
-                                        passwordController.text;
-                                    AuthService().signIn(
-                                        email: controller.email.value,
-                                        password: controller.password.value,
-                                        context: context);
+                                    controller.signIn(context);
                                   },
                                   child: const Text(
                                     "Sign In",
