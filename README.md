@@ -18,7 +18,7 @@ To get started with the Todo App project, ensure you have the following prerequi
 
 - **Flutter**: [Install Flutter](https://flutter.dev/docs/get-started/install)
 - **Dart**: [Install Dart](https://dart.dev/get-dart)
-- Firebase Auth + Firestoe database
+- Firebase Auth + Firestore database
 
 ### Installation
 
