@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:todo_app/controllers/todo_controller.dart';
+import 'package:todo_app/models/todo.dart';
+import 'package:todo_app/services/database_service.dart';
 import 'package:todo_app/utils/themes/colorsp.dart';
 
 class AddTodoPage extends StatefulWidget {
-  final Map? todo;
+  final Todo? todo; // Use Todo model directly
   const AddTodoPage({super.key, this.todo});
 
   @override
@@ -13,9 +13,11 @@ class AddTodoPage extends StatefulWidget {
 }
 
 class _AddTodoPageState extends State<AddTodoPage> {
+  final DatabaseService _databaseService = DatabaseService();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   bool isEdit = false;
+  String? todoId; // Track todo ID for editing
 
   @override
   void initState() {
@@ -23,10 +25,9 @@ class _AddTodoPageState extends State<AddTodoPage> {
     final todo = widget.todo;
     if (todo != null) {
       isEdit = true;
-      final title = todo['title'];
-      final description = todo['description'];
-      titleController.text = title;
-      descriptionController.text = description;
+      todoId = todo.id; // Initialize todoId for editing
+      titleController.text = todo.title;
+      descriptionController.text = todo.description;
     }
   }
 
@@ -39,8 +40,6 @@ class _AddTodoPageState extends State<AddTodoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final TodoController todoController = Get.find();
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -68,104 +67,76 @@ class _AddTodoPageState extends State<AddTodoPage> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-              onPressed: isEdit
-                  ? () => updateData(todoController)
-                  : () => submitData(todoController),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: kButtonColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                shadowColor: Colors.black12,
-                elevation: 20,
+            onPressed: isEdit ? () => updateData() : () => submitData(),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kButtonColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Text(
-                  isEdit ? 'Update' : 'Submit',
-                  style: const TextStyle(color: Colors.white, fontSize: 18),
-                ),
-              )),
+              shadowColor: Colors.black12,
+              elevation: 20,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Text(
+                isEdit ? 'Update' : 'Submit',
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Future<void> updateData(TodoController todoController) async {
-    final todo = widget.todo;
-    if (todo == null) {
-      Get.snackbar('Error', 'You cannot call update without todo data',
+  Future<void> updateData() async {
+    if (todoId == null) {
+      Get.snackbar('Error', 'You cannot call update without todo ID',
           backgroundColor: Colors.red);
       return;
     }
 
-    final id = todo['_id'];
-    final title = titleController.text;
-    final description = descriptionController.text;
-    final body = {
-      "title": title,
-      "description": description,
-      "is_completed": false,
-    };
-    final url = 'https://api.nstack.in/v1/todos/$id';
-    final Dio dio = Dio();
+    final updatedTodo = Todo(
+      id: todoId!, // Ensure ID is preserved for updates
+      title: titleController.text,
+      description: descriptionController.text,
+      is_Completed: widget.todo?.is_Completed ??
+          false, // Preserve current completion status
+    );
 
     try {
-      final response = await dio.put(
-        url,
-        data: body,
-        options: Options(
-          headers: {'Content-Type': 'application/json'},
-        ),
-      );
+      _databaseService.updateTodo(todoId!, updatedTodo);
 
-      if (response.statusCode == 200) {
-        titleController.text = '';
-        descriptionController.text = '';
-        Get.snackbar('Success', 'Update Success!',
-            snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
-        todoController.fetchTodos();
-      } else {
-        Get.snackbar('Error', 'Update Failed', backgroundColor: Colors.red);
-      }
+      titleController.text = '';
+      descriptionController.text = '';
+      Get.snackbar('Success', 'Update Success!',
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      Navigator.of(context).pop(); // Close the page after updating
     } catch (e) {
       Get.snackbar('Error', 'Failed to update data',
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
   }
 
-  Future<void> submitData(TodoController todoController) async {
-    final title = titleController.text;
-    final description = descriptionController.text;
-    final body = {
-      "title": title,
-      "description": description,
-      "is_completed": false,
-    };
-    const url = 'https://api.nstack.in/v1/todos';
-    final Dio dio = Dio();
-    //final uri = Uri.parse(url);
-    try {
-      final response = await dio.post(
-        url,
-        data: body,
-        options: Options(
-          headers: {'Content-Type': 'application/json'},
-        ),
-      );
+  Future<void> submitData() async {
+    final newTodo = Todo(
+      title: titleController.text,
+      description: descriptionController.text,
+      is_Completed: false,
+      id: '', // Leave empty for Firestore to handle ID generation
+    );
 
-      if (response.statusCode == 201) {
-        titleController.text = '';
-        descriptionController.text = '';
-        Get.snackbar('Success', 'Creation Success!',
-            backgroundColor: Colors.green);
-        todoController.fetchTodos();
-      } else {
-        Get.snackbar('Error', 'Creation Failed', backgroundColor: Colors.red);
-      }
+    try {
+      _databaseService.addTodo(newTodo);
+
+      titleController.text = '';
+      descriptionController.text = '';
+      Get.snackbar('Success', 'Creation Success!',
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
+      Navigator.of(context).pop(); // Close the page after adding
     } catch (e) {
       Get.snackbar('Error', 'Failed to submit data',
-          backgroundColor: Colors.red);
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
     }
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/services/auth_service.dart';
+import 'package:todo_app/view/screens/home_page.dart';
 import 'package:todo_app/view/screens/splashscreen.dart';
-import '../screens/too_list.dart';
 
 class Wrapper extends StatelessWidget {
   final AuthService _authService = Get.put(AuthService());
@@ -17,7 +17,7 @@ class Wrapper extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else {
           if (snapshot.hasData && snapshot.data == true) {
-            return const TodoListPage();
+            return const HomePage();
           } else {
             return const MySplashscreen();
           }

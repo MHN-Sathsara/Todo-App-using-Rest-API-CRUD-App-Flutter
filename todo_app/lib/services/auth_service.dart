@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:todo_app/view/screens/home_page.dart';
 import 'package:todo_app/view/screens/splashscreen.dart';
-import 'package:todo_app/view/screens/too_list.dart';
+
 // import 'package:todo_app/view/widgets/wrapper.dart';
 
 class AuthService extends GetxService {
@@ -110,7 +111,7 @@ class AuthService extends GetxService {
   void _navigateToTodoListPage(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const TodoListPage()),
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 
