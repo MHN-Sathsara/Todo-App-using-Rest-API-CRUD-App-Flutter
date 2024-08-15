@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
             bottom: Radius.circular(10.0),
           ),
         ),
-        backgroundColor: kBlueAccent,
+        backgroundColor: Colors.black,
         // centerTitle: false,
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
                       child: Text('${index + 1}')),
-                  tileColor: Colors.lightBlue[100],
+                  tileColor: Colors.grey[500],
                   title: Text(todo.title),
                   subtitle: Text(todo.description),
                   trailing: Checkbox(
@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Edit Todo'),
+          title: const Text('Todos ?'),
           content: const Text('Do you want to edit or delete this todo?'),
           actions: <Widget>[
             TextButton(
@@ -137,9 +137,11 @@ class _HomePageState extends State<HomePage> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () => _displayTextimputDialog(todoID: todoId),
-            ),
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _displayTextimputDialog(todoID: todoId);
+                }),
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
@@ -183,19 +185,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _displayTextimputDialog({String? todoID}) async {
+  void _displayTextimputDialog(
+      {String? todoID,
+      String? existingTitle,
+      String? existingDescription}) async {
+    // Initialize controllers with existing data if editing
+    _titleEditingController.text = existingTitle ?? '';
+    _descriptionController.text = existingDescription ?? '';
+
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Add Todo'),
+          title: Text(todoID == null ? 'Add Todo' : 'Edit Todo'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextField(
                 controller: _titleEditingController,
                 decoration: const InputDecoration(
-                  hintText: 'Enter Todo',
+                  hintText: 'Enter Todo ',
                 ),
               ),
               const SizedBox(height: 10),
@@ -214,28 +223,35 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Ok'),
               onPressed: () {
                 if (todoID == null) {
+                  // Add new Todo
                   Todo todo = Todo(
                     title: _titleEditingController.text,
                     description: _descriptionController.text,
                     is_Completed: false,
                   );
                   _databaseService.addTodo(todo);
-                  Navigator.of(context).pop();
-                  _titleEditingController.clear();
-                  _descriptionController.clear();
-                }
-                //else
-                else {
+                } else {
+                  // Update existing Todo
                   Todo todo = Todo(
                     title: _titleEditingController.text,
                     description: _descriptionController.text,
                     is_Completed: false,
                   );
                   _databaseService.updateTodo(todoID, todo);
-                  Navigator.of(context).pop();
-                  _titleEditingController.clear();
-                  _descriptionController.clear();
                 }
+                Navigator.of(context).pop(); // Close the dialog
+                _titleEditingController.clear(); // Clear text fields
+                _descriptionController.clear();
+              },
+            ),
+            MaterialButton(
+              color: Colors.grey,
+              textColor: Colors.white,
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                _titleEditingController.clear(); // Clear text fields
+                _descriptionController.clear();
               },
             ),
           ],
