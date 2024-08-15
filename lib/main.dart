@@ -1,17 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:todo_app/view/screens/home_page.dart';
+import 'package:todo_app/view/widgets/wrapper.dart';
 import 'firebase_options.dart';
+import 'package:todo_app/view/screens/registration_page.dart';
+import 'package:todo_app/view/screens/signin.dart';
+import 'package:todo_app/view/screens/splashscreen.dart';
+import 'package:todo_app/view/screens/too_list.dart';
+import 'package:todo_app/view/screens/add_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
-  FirebaseFirestore.instance.settings = const Settings(
-    persistenceEnabled: false,
   );
 
   runApp(const MyApp());
@@ -30,10 +31,15 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => HomePage()),
+        GetPage(name: '/', page: () => Wrapper()),
+        GetPage(name: '/spash', page: () => const MySplashscreen()),
+        GetPage(name: '/regp', page: () => const RegistrationPage()),
+        GetPage(name: '/signin', page: () => const SignIn()),
+        GetPage(name: '/list', page: () => const TodoListPage()),
+        GetPage(name: '/add', page: () => const AddTodoPage()),
       ],
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: Wrapper(),
     );
   }
 }
