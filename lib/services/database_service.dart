@@ -32,10 +32,4 @@ class DatabaseService {
   void deleteTodo(String todoId) async {
     _todosRef.doc(todoId).delete();
   }
-
-  Future<Todo> getTodoById(String id) async {
-    final doc =
-        await FirebaseFirestore.instance.collection('todos').doc(id).get();
-    return Todo.fromJson(doc.data()!);
-  }
 }

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/todo.dart';
-import 'package:todo_app/services/auth_service.dart';
 import 'package:todo_app/services/database_service.dart';
-import 'package:todo_app/view/screens/add_page.dart';
-import 'package:get/get.dart';
 
 //utils
 import 'package:todo_app/utils/themes/colorsp.dart';
@@ -16,6 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _titleEditingController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   final DatabaseService _databaseService = DatabaseService();
 
   @override
@@ -49,9 +48,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _buildUI(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(() => const AddTodoPage());
-        },
+        onPressed: _displayTextimputDialog,
         backgroundColor: kBlueAccent,
         child: const Icon(Icons.add),
       ),
@@ -84,6 +81,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }
+          print(todos);
           return ListView.builder(
             itemCount: todos.length,
             itemBuilder: (context, index) {
@@ -138,18 +136,12 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            TextButton(
-              child: const Text(
-                'Edit',
-                style: TextStyle(color: kBlueAccent),
-              ),
-              onPressed: () {},
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () => _displayTextimputDialog(todoID: todoId),
             ),
-            TextButton(
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: kBlueAccent),
-              ),
+            IconButton(
+              icon: const Icon(Icons.delete),
               onPressed: () {
                 _databaseService.deleteTodo(todoId);
                 Navigator.of(context).pop(); // Close the dialog
@@ -182,7 +174,68 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(color: kBlueAccent),
               ),
               onPressed: () async {
-                await AuthService().signOut(context);
+                // await AuthService().signOut(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _displayTextimputDialog({String? todoID}) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add Todo'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: _titleEditingController,
+                decoration: const InputDecoration(
+                  hintText: 'Enter Todo',
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _descriptionController,
+                decoration: const InputDecoration(
+                  hintText: 'Todo Description',
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            MaterialButton(
+              color: kBlueAccent,
+              textColor: Colors.white,
+              child: const Text('Ok'),
+              onPressed: () {
+                if (todoID == null) {
+                  Todo todo = Todo(
+                    title: _titleEditingController.text,
+                    description: _descriptionController.text,
+                    is_Completed: false,
+                  );
+                  _databaseService.addTodo(todo);
+                  Navigator.of(context).pop();
+                  _titleEditingController.clear();
+                  _descriptionController.clear();
+                }
+                //else
+                else {
+                  Todo todo = Todo(
+                    title: _titleEditingController.text,
+                    description: _descriptionController.text,
+                    is_Completed: false,
+                  );
+                  _databaseService.updateTodo(todoID, todo);
+                  Navigator.of(context).pop();
+                  _titleEditingController.clear();
+                  _descriptionController.clear();
+                }
               },
             ),
           ],
